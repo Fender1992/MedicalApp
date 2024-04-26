@@ -2,6 +2,7 @@
 using MedicalAppAPI.Models.Domains;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using MiNET.Utils;
 
 namespace MedicalAppAPI.Repos
 {
@@ -26,7 +27,7 @@ namespace MedicalAppAPI.Repos
             return records;
         }
 
-        public Task<MedicalRecord?>?GetMedicalRecordByIdAsync(Guid id)
+        public Task<MedicalRecord?>GetMedicalRecordByIdAsync(Guid id)
         {
             var currentUser = _medicalRecordDbContext.MedicalRecords.FirstOrDefaultAsync(x => x.Id == id);
             if (currentUser == null)

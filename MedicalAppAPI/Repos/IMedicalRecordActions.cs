@@ -1,4 +1,5 @@
 ﻿using MedicalAppAPI.Models.Domains;
+using MiNET.Utils;
 
 namespace MedicalAppAPI.Repos
 {

@@ -3,6 +3,7 @@ using MedicalAppAPI.DTOs;
 using MedicalAppAPI.Mapper;
 using MedicalAppAPI.Models.Domains;
 using MedicalAppAPI.Repos.UserActions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,9 +31,9 @@ namespace MedicalAppAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
-            var currentUsers = await _userRepositoryActions.GetAllUsersAsync();
+            var currentUsers = await _userRepositoryActions.GetAllUsersAsync(filterOn, filterQuery);
             return Ok(_mapper.Map<List<User>>(currentUsers));
         }
 

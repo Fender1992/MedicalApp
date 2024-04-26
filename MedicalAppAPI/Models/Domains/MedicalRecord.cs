@@ -1,8 +1,10 @@
-﻿namespace MedicalAppAPI.Models.Domains
+﻿using MiNET.Utils;
+
+namespace MedicalAppAPI.Models.Domains
 {
     public class MedicalRecord
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime Date {  get; set; }
         public string BloodPressure {  get; set; }
         public string HeartRate { get; set; }
@@ -14,9 +16,11 @@
             if (DateOfBirth > DateTime.Today.AddYears(-age)) age--;
             return age;
         }
+        
 
         public string Notes { get; set; }
         public string Diagnosis { get; set; }
         public string Description { get; set; }
     }
+    
 }

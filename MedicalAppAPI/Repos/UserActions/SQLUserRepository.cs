@@ -19,10 +19,20 @@ namespace MedicalAppAPI.Repos.UserActions
             return newUser;
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync(string? filterOn = null, string? filterQuery = null)
         {
-            var users = await _userDbContext.Users.ToListAsync();
-            return users;
+            var users = _userDbContext.Users.AsQueryable();
+
+            if(string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false) 
+            {
+                if(filterOn.Equals("lastName", StringComparison.OrdinalIgnoreCase))
+                {
+                    users = users.Where(x => x.lastName.Contains(filterQuery));
+                }
+
+            }
+
+            return await users.ToListAsync();
 
         }
 

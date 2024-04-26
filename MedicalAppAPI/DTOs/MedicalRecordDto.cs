@@ -1,4 +1,6 @@
-﻿namespace MedicalAppAPI.DTOs
+﻿using MiNET.Utils;
+
+namespace MedicalAppAPI.DTOs
 {
     public class MedicalRecordDto
     {
@@ -14,6 +16,8 @@
             if (DateOfBirth > DateTime.Today.AddYears(-age)) age--;
             return age;
         }
+        
+       
 
         public string Notes { get; set; }
         public string Diagnosis { get; set; }
