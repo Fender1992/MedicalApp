@@ -21,8 +21,7 @@ namespace MedicalAppAPI.DTOs
         public string email { get; set; }
         public string? phoneNumber { get; set; }
 
-        [Required]
-        public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
+        //public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
     }
     public enum Gender
     {

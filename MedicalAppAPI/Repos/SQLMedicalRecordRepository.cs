@@ -21,10 +21,24 @@ namespace MedicalAppAPI.Repos
             return newMedicalRecord;
         }
 
-        public Task<List<MedicalRecord>> GetAllMedicalRecordAsync()
+        public async Task<List<MedicalRecord>> GetAllMedicalRecordAsync(string? filterOn, string? filterQuery,
+            int pageNumber = 1, int pageSize = 1000)
         {
-            var records = _medicalRecordDbContext.MedicalRecords.ToListAsync();
-            return records;
+
+            var records = _medicalRecordDbContext.MedicalRecords.AsQueryable();
+
+            if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
+            {
+                if (filterOn.Equals("diagnosis", StringComparison.OrdinalIgnoreCase))
+                {
+                    records = records.Where(x => x.Diagnosis.Contains(filterQuery));
+                }
+
+            }
+
+            var skipRecords = (pageNumber - 1) * pageSize;
+
+            return await records.Skip(skipRecords).Take(pageSize).ToListAsync();
         }
 
         public Task<MedicalRecord?>GetMedicalRecordByIdAsync(Guid id)

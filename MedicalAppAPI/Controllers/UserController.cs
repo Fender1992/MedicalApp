@@ -6,6 +6,7 @@ using MedicalAppAPI.Repos.UserActions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalAppAPI.Controllers
 {
@@ -23,6 +24,7 @@ namespace MedicalAppAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> AddUser([FromBody] CreateUserDto createUserDto)
         {
             var newUser = _mapper.Map<User>(createUserDto);
@@ -31,14 +33,18 @@ namespace MedicalAppAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
+        [Authorize(Roles = "Reader")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            var currentUsers = await _userRepositoryActions.GetAllUsersAsync(filterOn, filterQuery);
+            var currentUsers = await _userRepositoryActions.GetAllUsersAsync(filterOn, filterQuery,
+                pageNumber, pageSize);
             return Ok(_mapper.Map<List<User>>(currentUsers));
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetUserById([FromRoute] Guid id)
         {
             var user = await _userRepositoryActions.GetByIdAsync(id);
@@ -53,6 +59,7 @@ namespace MedicalAppAPI.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] CreateUserDto updateUserDto)
         {
             var userToUpdate = await _userRepositoryActions.GetByIdAsync(id);

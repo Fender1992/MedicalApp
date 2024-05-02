@@ -11,6 +11,7 @@ namespace MedicalAppAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MedicalRecordController : ControllerBase
     {
         private readonly IMedicalRecordActions _medicalRecordActions;
@@ -23,6 +24,7 @@ namespace MedicalAppAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateMedicalRecord([FromBody] MedicalRecordDto medicalRecordDto)
         {
             var newRecord = _mapper.Map<MedicalRecord>(medicalRecordDto);
@@ -31,6 +33,7 @@ namespace MedicalAppAPI.Controllers
         }
         [HttpGet]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetMedicalRecordsByIdAsync([FromRoute] Guid id)
         {
             var record = await _medicalRecordActions.GetMedicalRecordByIdAsync(id);
@@ -41,13 +44,16 @@ namespace MedicalAppAPI.Controllers
             return Ok(_mapper.Map<MedicalRecord>(record));
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllMedicalRecords()
+        [Authorize(Roles = "Reader")]
+        public async Task<IActionResult> GetAllMedicalRecords([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            var records = await _medicalRecordActions.GetAllMedicalRecordAsync();
+            var records = await _medicalRecordActions.GetAllMedicalRecordAsync(filterOn, filterQuery, pageSize, pageNumber);
             return Ok(_mapper.Map<List<MedicalRecord>>(records));
         }
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateMedicalRecordAsync([FromRoute] Guid id, [FromBody] UpdateRecordDto updateRecordDto)
         {
             var recordToUpdate = await _medicalRecordActions.GetMedicalRecordByIdAsync(id);

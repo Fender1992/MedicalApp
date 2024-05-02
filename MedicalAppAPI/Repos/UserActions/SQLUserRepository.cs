@@ -19,7 +19,8 @@ namespace MedicalAppAPI.Repos.UserActions
             return newUser;
         }
 
-        public async Task<List<User>> GetAllUsersAsync(string? filterOn = null, string? filterQuery = null)
+        public async Task<List<User>> GetAllUsersAsync(string? filterOn = null, string? filterQuery = null,
+            int pageNumber = 1, int pageSize = 1000)
         {
             var users = _userDbContext.Users.AsQueryable();
 
@@ -32,7 +33,10 @@ namespace MedicalAppAPI.Repos.UserActions
 
             }
 
-            return await users.ToListAsync();
+            //Pagination
+            var skipResults = (pageNumber - 1 ) * pageSize;
+
+            return await users.Skip(skipResults).Take(pageSize).ToListAsync();
 
         }
 
