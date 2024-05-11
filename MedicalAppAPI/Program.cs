@@ -11,12 +11,14 @@ using System;
 using System.Net.Http;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using MedicalAppAPI.Repos.Image;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -24,8 +26,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevCors", (corsBuilder) =>
     {
+        string loginExt = "/api/Auth/Login";
+        string createUser = "/api/Auth/Register";
+        string ngrok_URL = "https://832f-2600-8803-2b10-9200-e184-7199-2fcc-770.ngrok-free.app";
+
+
         corsBuilder.WithOrigins("http://localhost:4200", "http://localhost:3000",
-            "http://localhost:8000", "https://0bb9-2600-8803-2b10-9200-d956-739-821f-b9e4.ngrok-free.app/api/Auth/Login")
+            "http://localhost:8000", ngrok_URL + loginExt, ngrok_URL + createUser)
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
@@ -81,6 +88,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("MedAppAuthConnec
 builder.Services.AddScoped<IUserRepositoryActions, SQLUserRepository>();
 builder.Services.AddScoped<IMedicalRecordActions, SQLMedicalRecordRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IImageRepository, LocalImageRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 

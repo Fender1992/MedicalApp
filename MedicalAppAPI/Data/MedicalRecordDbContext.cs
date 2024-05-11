@@ -9,6 +9,7 @@ namespace MedicalAppAPI.Data
         {
         }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public DbSet<ImageUploads> Images { get; set; }
 
     }
 }

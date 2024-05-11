@@ -33,7 +33,7 @@ namespace MedicalAppAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAllUsers([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {

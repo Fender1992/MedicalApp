@@ -11,7 +11,6 @@ namespace MedicalAppAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class MedicalRecordController : ControllerBase
     {
         private readonly IMedicalRecordActions _medicalRecordActions;
@@ -45,10 +44,11 @@ namespace MedicalAppAPI.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Reader")]
-        public async Task<IActionResult> GetAllMedicalRecords([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
+        public async Task<IActionResult> GetAllMedicalRecords([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            var records = await _medicalRecordActions.GetAllMedicalRecordAsync(filterOn, filterQuery, pageSize, pageNumber);
+            var records = await _medicalRecordActions.GetAllMedicalRecordAsync(filterOn, filterQuery,
+                pageNumber, pageSize);
             return Ok(_mapper.Map<List<MedicalRecord>>(records));
         }
         [HttpPut]

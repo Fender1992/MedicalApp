@@ -21,7 +21,7 @@ namespace MedicalAppAPI.Repos
             return newMedicalRecord;
         }
 
-        public async Task<List<MedicalRecord>> GetAllMedicalRecordAsync(string? filterOn, string? filterQuery,
+        public async Task<List<MedicalRecord>> GetAllMedicalRecordAsync(string? filterOn = null, string? filterQuery = null,
             int pageNumber = 1, int pageSize = 1000)
         {
 
